@@ -34,7 +34,7 @@ $pandocCommand = @(
 )
 
 Write-Host "Exporting $SourceFile to $OutputFile ..."
-& $Pandoc.Source "@pandocCommand"
+& $Pandoc.Source @pandocCommand
 
 if ($LASTEXITCODE -ne 0) {
     throw "PDF export failed."
