@@ -1,0 +1,36 @@
+name: Export Puppet Reference Book PDF
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pandoc and TeX dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-xetex
+
+      - name: Export markdown to PDF
+        run: |
+          pandoc "Puppet_Reference_Book_Complete.md" \
+            -o "Puppet_Reference_Book_Complete.pdf" \
+            --from=markdown \
+            --pdf-engine=xelatex \
+            -V geometry:margin=1in \
+            -V colorlinks=true \
+            -V linkcolor=blue \
+            --toc \
+            --number-sections
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: puppet-reference-book-pdf
+          path: Puppet_Reference_Book_Complete.pdf
